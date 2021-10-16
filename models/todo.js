@@ -17,8 +17,12 @@ const TodoSchema = new Schema(
             type: String,
         },
         assigned:{
-            type:String
-        }
+            type: String
+        },
+        done:{
+            type: Boolean,
+        },
+
 
     },
 );

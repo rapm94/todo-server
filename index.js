@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
- const cors= require('cors')
+const cors = require('cors');
 //DB config
 require('./database/config').dbConnection();
 
@@ -10,12 +10,15 @@ const app = express();
 
 //Lectura y parseo de JSON
 
+
+
 app.use(express.json());
+
+app.use(cors())
 
 // Node Server
 const server = require('http').createServer(app);
 
-app.use(cors())
 // Rutas
 app.use('/api', require('./routes/routes'));
 

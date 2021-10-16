@@ -1,7 +1,7 @@
 const {response, request} = require("express");
 const {Todo} = require("../models/todo");
 
-//Obtener todos los todos en la base de datos
+//Obtener los todos en la base de datos
 const getTodos = async(req, res = response) => {
     try{
         const todos = await Todo.find()
@@ -13,6 +13,23 @@ const getTodos = async(req, res = response) => {
         console.log(e);
     }
 }
+// Obtener solo un todo por ID
+const getOneTodo = async(req = request ,res=response) =>{
+
+    try{ 
+        const{
+            params:{id}
+        }=req 
+        const todo = await Todo.findById({_id:id})
+        res.status(200).json({
+            message: 'Todo encontrado',
+            todo: todo,
+        })
+    } catch(e){
+        console.log(e)
+    }
+
+}
 
 //Agregar nuevo todo a la base de datos
 const addTodo = async (req = request, res=response) =>{
@@ -22,7 +39,8 @@ const addTodo = async (req = request, res=response) =>{
             name: body.name,
             description:body.description,
             priority:body.priority,
-            assigned:body.assigned
+            assigned:body.assigned,
+            done: body.done
         })
 
         const newTodo = await todo.save()
@@ -48,13 +66,11 @@ const updateTodo = async (req = request, res=response) =>{
         
         const updateTodo = await Todo.findByIdAndUpdate(
             {_id:id},
-            body
+            body,
         )
-
         const allTodos = await Todo.find()
-
         res.status(201).json({
-            message: 'Todo agregado',
+            message: 'Todo actualizado',
             todo: updateTodo,
             todos:allTodos,
         })
@@ -73,7 +89,7 @@ const deleteTodo = async (req = request, res = response) =>{
         const allTodos = await Todo.find()
 
         res.status(200).json({
-            message: 'Todo agregado',
+            message: 'Todo borrado',
             todo: deletedTodo,
             todos:allTodos,
         })
@@ -83,5 +99,5 @@ const deleteTodo = async (req = request, res = response) =>{
 }
 
 
-module.exports = {addTodo, getTodos, updateTodo, deleteTodo};
+module.exports = {addTodo, getTodos, updateTodo, deleteTodo, getOneTodo};
 
